@@ -14,7 +14,8 @@ export function setupWebSocket(server: Server) {
 
     wss.clients.forEach(client => {
       if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify({prices, closes})); // use JSON.stringify
+        console.log(JSON.stringify({prices, closes}));
+        client.send(JSON.stringify({prices, closes})); 
       }
     });
   }, 5000);
