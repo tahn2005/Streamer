@@ -7,7 +7,7 @@ import { getClosesFromCache } from './streaming/closingcache';
 export function setupWebSocket(server: Server) {
   const wss = new WebSocketServer({ server });
 
-  // Push prices every 5 seconds
+  // Push prices every minute
   setInterval(async () => {
     const prices = getinitprices();     
     const closes = getClosesFromCache(); 
@@ -18,7 +18,7 @@ export function setupWebSocket(server: Server) {
         client.send(JSON.stringify({prices, closes})); 
       }
     });
-  }, 5000);
+  }, 60000);
 
   // Handle new client connections
   wss.on('connection', (ws) => {
