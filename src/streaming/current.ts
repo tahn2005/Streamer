@@ -17,11 +17,6 @@ export async function initprices() {
   });
 }
 
-//
-export function getinitprices(): number[] {
-  return pricesCache;
-}
-
 export function updateprices(symbol: string, price: number) {
   const index = symbols.findIndex(entry => entry.symbol === symbol);
   if (index !== -1) {
@@ -30,6 +25,8 @@ export function updateprices(symbol: string, price: number) {
     console.warn(`Symbol "${symbol}" not found in symbols array`);
   }
 }
+
+export {pricesCache};
 
 
 

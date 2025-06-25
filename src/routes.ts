@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
-import { getinitprices, initprices} from './streaming/current';
-import { getClosesFromCache, initializeClosesCache} from './streaming/closingcache';
+import { pricesCache} from './streaming/current';
+import { closesCache} from './streaming/closingcache';
+import { newsCache } from './news';
 
 const router = express.Router();
 
@@ -42,10 +43,10 @@ function splitSymbolsByType(input: { symbol: string, type: string }[]) {
 //Endpoint: initialzes default values
 router.get('/init', async (req: Request, res: Response) => {
   try {
-    const prices = getinitprices();     
-    const closes = getClosesFromCache();             
-
-    res.json({ prices, closes });
+    const prices = pricesCache;     
+    const closes = closesCache;    
+    const news = newsCache;         
+    res.json({ prices, closes, news });
   } catch (error) {
     console.error('Error in /init:', error);
     res.status(500).json({ error: 'Failed to fetch prices' });

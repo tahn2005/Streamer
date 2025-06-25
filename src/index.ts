@@ -7,12 +7,10 @@ import {initprices} from './streaming/current';
 import { cryptostream } from './streaming/cryptosocket';
 import { stockstream} from './streaming/stocksocket';
 import { setupWebSocket } from './websocket'; 
-import { newsstream } from './streaming/newssocket'; 
+import { getNews } from './news';
 
 stockstream();
 cryptostream();
-//newsstream();
-
 
 const app = express();
 const server = http.createServer(app);
@@ -28,4 +26,5 @@ server.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   await initializeClosesCache(); // ensures cache is ready at boot
   await initprices(); //fetches latest prices at server start
+  await getNews(); //gathers news
 });
