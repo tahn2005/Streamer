@@ -1,13 +1,7 @@
 import { DateTime } from 'luxon';
 import * as stock from '../stock';
 import * as crypto from '../crypto';
-
-const symbols = [
-  "SPY:stock", "QQQ:stock", "IWM:stock", "AAPL:stock", "MSFT:stock",
-  "BTC/USD:crypto", "ETH/USD:crypto", "NVDA:stock", "META:stock", "AMZN:stock",
-  "TSLA:stock", "GOOGL:stock", "DIA:stock", "VTI:stock", "GLD:stock",
-  "SOL/USD:crypto", "DOGE/USD:crypto"
-];
+import {stocksymbol, cryptosymbol} from '../routes';
 
 // Determine if market has closed (4PM ET)
 export function isAfterMarketClose(): boolean {
@@ -40,42 +34,24 @@ export function cryptoTargetDate(): [string, string] {
   return [target.toISO(), target.plus({ minutes: 1 }).toISO()];
 }
 
-// Split symbols by type
-export function splitSymbolsByType() {
-  const cryptosymbol: string[] = [];
-  const stocksymbol: string[] = [];
-  for (const item of symbols) {
-    const [symbol, type] = item.split(':');
-    if (type === 'crypto') cryptosymbol.push(symbol);
-    else if (type === 'stock') stocksymbol.push(symbol);
-  }
-  return { cryptosymbol, stocksymbol };
-}
-
-const { cryptosymbol, stocksymbol } = splitSymbolsByType();
-
 //gets closing prices for a list of stocks
 export async function closingstocks() {
   const [stockStart, stockEnd] = stockTargetDate();
-  const stockclose = await Promise.all(
+  return Promise.all(
     stocksymbol.map(symbol =>
       stock.getclose([symbol], [stockStart, stockEnd]).then(res => res[0])
     )
   );
-  return stockclose;
 }
 
 //gets closing prices for a list of crypto
 export async function closingcrypto() {
   const [cryptoStart, cryptoEnd] = cryptoTargetDate();
-  const cryptoclose = await Promise.all(
+  return Promise.all(
     cryptosymbol.map(symbol =>
       crypto.getclose([symbol], [cryptoStart, cryptoEnd]).then(res => res[0])
     )
   );
-  return cryptoclose
 }
-
-export {symbols, stocksymbol, cryptosymbol};
 
 

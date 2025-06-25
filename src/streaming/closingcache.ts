@@ -1,4 +1,5 @@
-import {symbols, closingcrypto, closingstocks} from './closing';
+import {closingcrypto, closingstocks} from './closing';
+import { symbols } from '../routes';
 import cron from 'node-cron';
 
 //caches storing closing prices
@@ -11,8 +12,7 @@ function rebuildMergedCache() {
   let stockIndex = 0;
   let cryptoIndex = 0;
   closesCache = symbols.map(entry => {
-    const [, type] = entry.split(':');
-    return type === 'stock' ? stockcache[stockIndex++] : cryptocache[cryptoIndex++];
+    return entry.type === 'stock' ? stockcache[stockIndex++] : cryptocache[cryptoIndex++];
   });
 }
 

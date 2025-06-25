@@ -1,4 +1,4 @@
-import { symbols, stocksymbol, cryptosymbol } from './closing';
+import { symbols, stocksymbol, cryptosymbol } from '../routes';
 import * as stock from '../stock';
 import * as crypto from '../crypto';
 
@@ -13,8 +13,7 @@ export async function initprices() {
   let stockIndex = 0;
   let cryptoIndex = 0;
   pricesCache = symbols.map(entry => {
-    const [, type] = entry.split(':');
-    return type === 'stock' ? stockprices[stockIndex++] : cryptoprices[cryptoIndex++];
+    return entry.type === 'stock' ? stockprices[stockIndex++] : cryptoprices[cryptoIndex++];
   });
 }
 
@@ -24,14 +23,14 @@ export function getinitprices(): number[] {
 }
 
 export function updateprices(symbol: string, price: number) {
-  const index = symbols.findIndex(entry => entry.startsWith(symbol));
+  const index = symbols.findIndex(entry => entry.symbol === symbol);
   if (index !== -1) {
     pricesCache[index] = price;
-  } 
-  else {
+  } else {
     console.warn(`Symbol "${symbol}" not found in symbols array`);
   }
 }
+
 
 
 

@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
-import {stocksymbol} from './closing';
+import {stocksymbol} from '../routes';
 dotenv.config();
 
 const API_KEY = process.env.ALPACA_KEY_ID || 'PKEWVTHE7H08E493KMDF';
@@ -12,8 +12,6 @@ export function newsstream() {
 
   socket.on('open', () => {
     console.log('Connected to Alpaca News WebSocket');
-
-    // Authenticate
     socket.send(JSON.stringify({
       action: 'auth',
       key: API_KEY,
@@ -27,8 +25,6 @@ export function newsstream() {
     for (const msg of messages) {
       if (msg.T === 'success' && msg.msg === 'authenticated') {
         console.log('✅ Authenticated successfully');
-
-        // Subscribe to AAPL trades
         socket.send(JSON.stringify({
           action: 'subscribe',
           news: ["*"],

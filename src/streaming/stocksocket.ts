@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
-import {stocksymbol} from './closing';
+import {stocksymbol} from '../routes';
 import { updateprices } from './current';
 dotenv.config();
 

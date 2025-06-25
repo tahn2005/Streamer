@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
-import { cryptosymbol } from './closing';
+import { cryptosymbol } from '../routes';
 import { updateprices } from './current';
 dotenv.config();
 
@@ -16,8 +16,6 @@ export function cryptostream() {
 
   socket.on('open', () => {
     console.log('Connected to Alpaca Crypto WebSocket');
-
-    // Authenticate
     socket.send(JSON.stringify({
       action: 'auth',
       key: API_KEY,
@@ -31,8 +29,6 @@ export function cryptostream() {
     for (const msg of messages) {
       if (msg.T === 'success' && msg.msg === 'authenticated') {
         console.log('✅ Authenticated successfully');
-
-        // Subscribe to AAPL trades
         socket.send(JSON.stringify({
           action: 'subscribe',
           trades: cryptosymbol,
