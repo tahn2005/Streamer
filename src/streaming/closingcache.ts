@@ -41,5 +41,5 @@ export async function updateCryptoCache() {
 }
 
 // Schedule daily updates
-cron.schedule('0 16 * * *', updateStockCache, { timezone: 'America/New_York' });
+cron.schedule('15 16 * * *', updateStockCache, { timezone: 'America/New_York' });
 cron.schedule('0 0 * * *', updateCryptoCache, { timezone: 'UTC' });

@@ -23,7 +23,7 @@ export function stockTargetDate(): [string, string] {
     ? now.set({ hour: 15, minute: 59, second: 0, millisecond: 0 })
     : now.minus({ days: 1 }).set({ hour: 15, minute: 59, second: 0, millisecond: 0 });
 
-  return [target.toUTC().toISO(), target.plus({ minutes: 1 }).toUTC().toISO()];
+  return [target.toUTC().toISO(), target.plus({ minutes: 15 }).toUTC().toISO()];
 }
 
 // Determine if past 00:00 UTC (new crypto day)

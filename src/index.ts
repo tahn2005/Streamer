@@ -11,7 +11,7 @@ import { newsstream } from './streaming/newssocket';
 
 stockstream();
 cryptostream();
-newsstream();
+//newsstream();
 
 
 const app = express();
