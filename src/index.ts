@@ -19,8 +19,11 @@ const server = http.createServer(app);
 // CORS options with domain restriction
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigins = ['https://buegr.com'];
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow if no origin (e.g. when testing locally)
+    const allowedOrigins = process.env.NODE_ENV === 'production'
+      ? ['https://buegr.com'] // Production domain
+      : ['http://localhost:3000', 'http://localhost:4200']; // Local dev domains
+
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow if no origin (e.g., testing locally)
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -36,6 +39,15 @@ app.use('/api', router);
 
 // WebSocket setup
 setupWebSocket(server);
+
+// Error handling for CORS
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    res.status(403).json({ message: 'CORS policy: Access denied' });
+  } else {
+    next(err);  // Forward other errors
+  }
+});
 
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, async () => {
