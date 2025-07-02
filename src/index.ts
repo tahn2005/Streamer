@@ -20,13 +20,14 @@ const server = http.createServer(app);
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.NODE_ENV === 'production'
-      ? ['https://buegr.com'] // Production domain
-      : ['http://localhost:3000', 'http://localhost:4200']; // Local dev domains
+      ? ['https://www.buegr.com'] // Production domain
+      : ['http://localhost:5173', 'https://www.buegr.com']; // Local dev domains
 
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow if no origin (e.g., testing locally)
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
+      console.log('not allowed');
     }
   },
 };
