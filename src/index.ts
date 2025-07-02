@@ -21,7 +21,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.NODE_ENV === 'production'
       ? ['https://www.buegr.com'] // Production domain
-      : ['http://localhost:5173', 'https://www.buegr.com']; // Local dev domains
+      : ['http://localhost:5173']; // Local dev domains
 
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow if no origin (e.g., testing locally)
       callback(null, true);
