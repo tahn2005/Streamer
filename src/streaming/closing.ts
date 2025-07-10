@@ -13,9 +13,30 @@ export function isAfterMarketClose(): boolean {
 // Generate ISO strings for 4PM ET stock close
 export function stockTargetDate(): [string, string] {
   const now = DateTime.now().setZone('America/New_York');
-  const target = isAfterMarketClose()
-    ? now.set({ hour: 15, minute: 59, second: 0, millisecond: 0 })
-    : now.minus({ days: 1 }).set({ hour: 15, minute: 59, second: 0, millisecond: 0 });
+  const day = now.weekday; // 1 = Monday, 7 = Sunday
+  const hour = now.hour;
+  const minute = now.minute;
+
+  // Weekend or before market close on Monday (Fri 4PM to Mon 4PM)
+  const isExtendedWeekend =
+    (day === 5 && hour >= 16) || // Friday after 4PM
+    day === 6 || // Saturday
+    day === 7 || // Sunday
+    (day === 1 && (hour < 16 || (hour === 16 && minute === 0))); // Monday before 4PM
+
+  let target: DateTime;
+
+  if (isExtendedWeekend) {
+    // Backtrack to last Friday at 3:59 PM ET
+    const daysToFriday = (day >= 5 ? day - 5 : 2 + day);
+    target = now.minus({ days: daysToFriday }).set({ hour: 15, minute: 59, second: 0, millisecond: 0 });
+  } else if (isAfterMarketClose()) {
+    // Use today at 3:59 PM ET
+    target = now.set({ hour: 15, minute: 59, second: 0, millisecond: 0 });
+  } else {
+    // Use yesterday at 3:59 PM ET
+    target = now.minus({ days: 1 }).set({ hour: 15, minute: 59, second: 0, millisecond: 0 });
+  }
 
   return [target.toUTC().toISO(), target.plus({ minutes: 15 }).toUTC().toISO()];
 }

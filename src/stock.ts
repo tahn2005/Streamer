@@ -6,15 +6,14 @@ dotenv.config();
 //takes a list of stock symbols as an argument, returns last trade prices in order of origonal list
 export async function lasttrade(symbols: string[]): Promise<(number | null)[]> {
   const format = symbols.map(s => encodeURIComponent(s)).join(',');
-  console.log('api');
   const options = {
     method: 'GET' as const,
     url: 'https://data.alpaca.markets/v2/stocks/trades/latest?symbols=' + format,
     params: {feed: 'iex'},
     headers: {
       accept: 'application/json',
-      'APCA-API-KEY-ID': 'PKEWVTHE7H08E493KMDF',
-      'APCA-API-SECRET-KEY': 'QqxoAc4DW4UcyqfoiLeNYTRfhCe6g2h9h6AAL6Ay'
+      'APCA-API-KEY-ID': process.env.ALPACA_KEY_ID,
+      'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY
     }
   };
   try {
@@ -50,8 +49,8 @@ export async function getclose(symbols: string[], times: string[]): Promise<(num
       `&sort=asc`,
     headers: {
       accept: 'application/json',
-      'APCA-API-KEY-ID': 'PKEWVTHE7H08E493KMDF',
-      'APCA-API-SECRET-KEY': 'QqxoAc4DW4UcyqfoiLeNYTRfhCe6g2h9h6AAL6Ay'
+      'APCA-API-KEY-ID': process.env.ALPACA_KEY_ID,
+      'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY
     }
   };
 

@@ -4,8 +4,8 @@ import {stocksymbol} from '../routes';
 import { updateprices } from './current';
 dotenv.config();
 
-const API_KEY = process.env.ALPACA_KEY_ID || 'PKEWVTHE7H08E493KMDF';
-const SECRET_KEY = process.env.ALPACA_SECRET_KEY || 'QqxoAc4DW4UcyqfoiLeNYTRfhCe6g2h9h6AAL6Ay';
+const API_KEY = process.env.ALPACA_KEY_ID;
+const SECRET_KEY = process.env.ALPACA_SECRET_KEY;
 const WS_URL = 'wss://stream.data.alpaca.markets/v2/delayed_sip';
 
 export function stockstream() {
@@ -27,7 +27,7 @@ export function stockstream() {
 
     for (const msg of messages) {
       if (msg.T === 'success' && msg.msg === 'authenticated') {
-        console.log('✅ Authenticated successfully');
+        console.log('Authenticated successfully');
 
         // Subscribe to AAPL trades
         socket.send(JSON.stringify({
@@ -35,20 +35,20 @@ export function stockstream() {
           trades: stocksymbol,
         }));
       } else if (msg.T === 'subscription') {
-        console.log('📡 Subscribed to:', msg);
+        console.log('Subscribed to:', msg);
       } else if (msg.T === 't') {
         updateprices(msg.S, msg.p);
       } else {
-        console.log('📩 Other message:', msg);
+        console.log('Other message:', msg);
       }
     }
   });
 
   socket.on('error', (err) => {
-    console.error('❌ WebSocket error:', err);
+    console.error('WebSocket error:', err);
   });
 
   socket.on('close', () => {
-    console.log('🔌 Connection closed stock');
+    console.log('onnection closed stock');
   });
 }

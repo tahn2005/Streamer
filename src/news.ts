@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export type NewsArticle = {
     source: string;
     id: string;
@@ -17,7 +20,7 @@ export type NewsArticle = {
    * Fetches finance news from NewsData.io and updates the in-memory cache.
    */
   export async function getNews(): Promise<void> {
-    const API_KEY = 'pub_7a972cdc6d0e4032bc266ec5b7d5998b';
+    const API_KEY = process.env.NEWS_KEY;
     const query = encodeURIComponent("stock market OR wall street OR nasdaq OR s&p OR earnings OR inflation OR federal reserve");
     const url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&q=${query}&category=business&language=en&country=us`;
   
@@ -57,7 +60,7 @@ export type NewsArticle = {
       // Cap at 20 articles
       newsCache = merged.slice(0, 20);
     } catch (error) {
-      console.error("❌ Error fetching finance news:", error);
+      console.error("Error fetching finance news:", error);
     }
   }
   

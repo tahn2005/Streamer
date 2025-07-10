@@ -1,30 +1,21 @@
 import express, { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import { pricesCache} from './streaming/current';
 import { closesCache} from './streaming/closingcache';
 import { newsCache } from './news';
+dotenv.config();
 
 const router = express.Router();
+router.use(verifyToken);
+let symbols = JSON.parse(process.env.SYMBOLS);
 
-let symbols = [
-  { symbol: "SPY", type: 'stock' },
-  { symbol: "QQQ", type: 'stock' },
-  { symbol: "IWM", type: 'stock' },
-  { symbol: "AAPL", type: 'stock' },
-  { symbol: "MSFT", type: 'stock' },
-  { symbol: "BTC/USD", type: 'crypto' },
-  { symbol: "ETH/USD", type: 'crypto' },
-  { symbol: "NVDA", type: 'stock' },
-  { symbol: "META", type: 'stock' },
-  { symbol: "AMZN", type: 'stock' },
-  { symbol: "TSLA", type: 'stock' },
-  { symbol: "GOOGL", type: 'stock' },
-  { symbol: "DIA", type: 'stock' },
-  { symbol: "VTI", type: 'stock' },
-  { symbol: "GLD", type: 'stock' },
-  { symbol: "SOL/USD", type: 'crypto' },
-  { symbol: "DOGE/USD", type: 'crypto' }
-];
-
+function verifyToken(req, res, next) {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token || token !== process.env.TOKEN) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid or missing token' });
+  }
+  next();
+}
 const split = splitSymbolsByType(symbols);
 let cryptosymbol = split.cryptosymbol;
 let stocksymbol = split.stocksymbol;

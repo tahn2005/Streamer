@@ -2,12 +2,15 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import router from './routes';
+import dotenv from 'dotenv';
 import { initializeClosesCache } from './streaming/closingcache';
 import { initprices } from './streaming/current';
 import { cryptostream } from './streaming/cryptosocket';
 import { stockstream } from './streaming/stocksocket';
 import { setupWebSocket } from './websocket'; 
 import { getNews } from './news';
+dotenv.config();
+
 
 // Stream services
 stockstream();
@@ -16,21 +19,24 @@ cryptostream();
 const app = express();
 const server = http.createServer(app);
 
-// CORS options with domain restriction
+const prod = process.env.PROD.split(',').map(o => o.trim());
+const dev = process.env.DEV.split(',').map(o => o.trim());
+
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = process.env.NODE_ENV === 'production'
-      ? ['https://www.buegr.com'] // Production domain
-      : ['http://localhost:5173']; // Local dev domains
+      ? prod
+      : dev;
 
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) { // Allow if no origin (e.g., testing locally)
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
+      console.log('CORS origin not allowed:', origin);
       callback(new Error('Not allowed by CORS'));
-      console.log('not allowed');
     }
   },
 };
+
 
 app.use(cors(corsOptions));  // Use the restricted CORS options
 
@@ -50,7 +56,7 @@ app.use((err, req, res, next) => {
   }
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 server.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   await initializeClosesCache(); // ensures cache is ready at boot
