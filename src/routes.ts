@@ -12,6 +12,7 @@ let symbols = JSON.parse(process.env.SYMBOLS);
 function verifyToken(req, res, next) {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token || token !== process.env.TOKEN) {
+    console.log("invalid token");
     return res.status(401).json({ error: 'Unauthorized: Invalid or missing token' });
   }
   next();
