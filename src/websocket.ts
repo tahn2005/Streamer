@@ -18,7 +18,7 @@ export function setupWebSocket(server: Server) {
   // Push prices every minute
   setInterval(() => {
     const prices = pricesCache;
-    const closes = closesCache;
+    const closes = closesCache; 
     const type = 'p';
 
     wss.clients.forEach(client => {
