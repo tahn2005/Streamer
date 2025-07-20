@@ -52,7 +52,7 @@ export function setupWebSocket(server: Server) {
   // Intercept and authenticate upgrade requests
   server.on('upgrade', (req, socket, head) => {
     const requestUrl = new URL(req.url || '', `http://${req.headers.host}`);
-    const token = requestUrl.searchParams.get('token');
+
     const origin = req.headers.origin;
   
     const allowedOrigins = process.env.NODE_ENV === 'production'
