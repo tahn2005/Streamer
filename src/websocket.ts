@@ -60,11 +60,11 @@ export function setupWebSocket(server: Server) {
       : dev;
   
     // Token check
-    if (token !== process.env.TOKEN) {
-      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-      socket.destroy();
-      return;
-    }
+    // if (token !== process.env.TOKEN) {
+    //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+    //   socket.destroy();
+    //   return;
+    // }
   
     // Origin domain restriction
     if (origin && !allowedOrigins.includes(origin)) {
