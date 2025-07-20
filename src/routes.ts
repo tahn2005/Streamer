@@ -6,17 +6,18 @@ import { newsCache } from './news';
 dotenv.config();
 
 const router = express.Router();
-router.use(verifyToken);
 let symbols = JSON.parse(process.env.SYMBOLS);
 
-function verifyToken(req, res, next) {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token || token !== process.env.TOKEN) {
-    console.log("invalid token");
-    return res.status(401).json({ error: 'Unauthorized: Invalid or missing token' });
-  }
-  next();
-}
+// router.use(verifyToken);
+// function verifyToken(req, res, next) {
+//   const token = req.headers['authorization']?.split(' ')[1];
+//   if (!token || token !== process.env.TOKEN) {
+//     console.log("invalid token");
+//     return res.status(401).json({ error: 'Unauthorized: Invalid or missing token' });
+//   }
+//   next();
+// }
+
 const split = splitSymbolsByType(symbols);
 let cryptosymbol = split.cryptosymbol;
 let stocksymbol = split.stocksymbol;
