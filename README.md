@@ -47,7 +47,7 @@ npm install
 cp .env
 ```
 
-4. Configure your `.env` file with your API credentials:
+4. Configure your `.env` file with your API credentials. Note: NEVER push your env files to GitHub. For deplpyment, configure them on the deployment platform instead. Included in the repository is a sample `.env` file for example usage only. Below is how your environment variables should be formatted:
 ```env
 ALPACA_KEY_ID=your_alpaca_id
 ALPACA_SECRET_KEY=your_alpaca_secret
