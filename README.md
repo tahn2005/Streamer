@@ -253,7 +253,7 @@ ISC License
 
 ## Support
 
-For issues and questions, please open an issue in the repository or contact the development team.
+For issues and questions, please open an issue in the repository or contact me at tdahn2005@gmail.com.
 
 ## Disclaimer
 
