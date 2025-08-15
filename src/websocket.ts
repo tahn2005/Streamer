@@ -52,7 +52,7 @@ export function setupWebSocket(server: Server) {
   // Intercept and authenticate upgrade requests
   server.on('upgrade', (req, socket, head) => {
     const requestUrl = new URL(req.url || '', `http://${req.headers.host}`);
-
+    const token = requestUrl.searchParams.get('token');
     const origin = req.headers.origin;
   
     const allowedOrigins = process.env.NODE_ENV === 'production'
@@ -60,11 +60,11 @@ export function setupWebSocket(server: Server) {
       : dev;
   
     // Token check
-    // if (token !== process.env.TOKEN) {
-    //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-    //   socket.destroy();
-    //   return;
-    // }
+    if (token !== process.env.TOKEN) {
+      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+      socket.destroy();
+      return;
+    }
   
     // Origin domain restriction
     if (origin && !allowedOrigins.includes(origin)) {

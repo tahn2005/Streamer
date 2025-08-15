@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { pricesCache} from './streaming/current';
 import { closesCache} from './streaming/closingcache';
 import { newsCache } from './news';
+import { initializeClosesCache, initprices, getinitprices, getClosesFromCache } from './streaming/closingcache';
 dotenv.config();
 
 const router = express.Router();
@@ -48,23 +49,23 @@ router.get('/init', async (req: Request, res: Response) => {
 });
 
 //Endpoint: subscribes to certain stocks
-// router.post('/sub', async (req: Request, res: Response) => {
-//   try {
-//     symbols = req.body;
-//     const split = splitSymbolsByType(symbols);
-//     cryptosymbol = split.cryptosymbol;
-//     stocksymbol = split.stocksymbol;
-//     await initializeClosesCache(); // ensures cache is ready at boot
-//     await initprices(); //fetches latest prices at server start
-//     const prices = getinitprices();     
-//     const closes = getClosesFromCache();             
+router.post('/sub', async (req: Request, res: Response) => {
+  try {
+    symbols = req.body;
+    const split = splitSymbolsByType(symbols);
+    cryptosymbol = split.cryptosymbol;
+    stocksymbol = split.stocksymbol;
+    await initializeClosesCache(); // ensures cache is ready at boot
+    await initprices(); //fetches latest prices at server start
+    const prices = getinitprices();     
+    const closes = getClosesFromCache();             
 
-//     res.json({ prices, closes });
-//   } catch (error) {
-//     console.error('Error in /init:', error);
-//     res.status(500).json({ error: 'Failed to fetch prices' });
-//   }
-// });
+    res.json({ prices, closes });
+  } catch (error) {
+    console.error('Error in /init:', error);
+    res.status(500).json({ error: 'Failed to fetch prices' });
+  }
+});
 
 // Ping endpoint
 router.get('/ping', (_req, res) => {
